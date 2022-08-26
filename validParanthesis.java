@@ -1,21 +1,25 @@
-import java.util.ArrayList;
+import java.util.Stack;
 
 public class validPara {
   public static void main(String[] args) {
-    isValid("()[]{}");
+    isValid("]");
   }
 
   public static boolean isValid(String s) {
     // implement stack to store the string - I'm choosing to use ArrayList for my
     // stack
-    ArrayList<Character> linter = new ArrayList<Character>();
+    Stack<Character> linter = new Stack<Character>();
     for (int i = 0; i < s.length(); i++) {
       char temp = s.charAt(i);
       // If it's an opening brace, push it onto the stack
       if (temp == '(' || temp == '{' || temp == '[') {
-        linter.add(temp);
+        linter.push(temp);
       } else if (temp == ')' || temp == '}' || temp == ']') {
-        char tempTwo = linter.remove(linter.size() - 1);
+        if (linter.empty()) {
+          System.out.println("Missing opening brace");
+          return false;
+        }
+        char tempTwo = linter.pop();
         if ((temp == ')' && tempTwo != '(') || (temp == '}' && tempTwo != '{') || (temp == ']' && tempTwo != '[')) {
           System.out.println("Brace mismatch");
           return false;
@@ -28,7 +32,7 @@ public class validPara {
       // If stack is not empty by the end of the loop, then we are missing a closing
       // brace - check type and return the type of brace that we are missing
     }
-    if (!linter.isEmpty()) {
+    if (!linter.empty()) {
       System.out.println("Missing closing brace");
       return false;
     }
